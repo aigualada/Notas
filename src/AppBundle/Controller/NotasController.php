@@ -3,7 +3,6 @@
 
 namespace AppBundle\Controller;
 
-
 use AppBundle\Entity\Nota;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -11,86 +10,80 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class NotasController
+ * @package AppBundle\Controller
+ * @Route("/api")
+ */
 class NotasController extends Controller
 {
 
     /**
      * @param Request $request
-     * @Route("/api/nota", name="crear_nota")
+     * @Route("/nota", name="crear_nota")
      * @Method("POST")
      */
     public function crearNota(Request $request)
     {
-
-        $em = $this->getDoctrine()->getManager();
+        $svc = $this->get('notas.service');
 
         $textNota = $request->get('texto');
 
-        $nota = new Nota();
-
-        $nota->setTexto($textNota);
-
-        $em->persist($nota);
-        $em->flush();
+        $nota = $svc->crearNota($textNota);
 
         return new JsonResponse($nota);
 
     }
 
     /**
-     * @Route("/api/notas", name="notas")
+     * @Route("/notas", name="notas")
      * @Method("GET")
      */
     public function getNotas()
     {
-        $em = $this->getDoctrine()->getManager();
+        $svc = $this->get('notas.service');
 
-        $notas = $em->getRepository('AppBundle:Nota')->findAll();
-
-        return new JsonResponse(json_encode($notas));
+        return new JsonResponse(array('notas' => $svc->getNotas()));
 
     }
 
     /**
      * @param Request $request
      * @param $nota
-     * @Route("/api/nota/{id}", name="consultar_nota")
+     * @Route("/nota/{id}", name="consultar_nota")
      * @Method("GET")
      */
-    public function getNota(Request $request, Nota $nota)
+    public function getNota(Nota $nota)
     {
-        return new JsonResponse($nota);
+        return new JsonResponse(array('nota' => $nota));
     }
 
     /**
      * @param Request $request
      * @param Nota $nota
-     * @Route("/api/nota/{id}/favorita", name="marcar_favorita")
+     * @Route("/nota/{id}/favorita", name="marcar_favorita")
      * @Method("PUT")
      */
-    public function marcarNotaFavorita(Request $request, Nota $nota)
+    public function marcarNotaFavorita(Nota $nota)
     {
-        $em = $this->getDoctrine()->getManager();
+        $svc = $this->get('notas.service');
 
-        $nota->setFavorita(true);
-        $em->flush();
+        $nota = $svc->marcarFavorita($nota);
 
         return new JsonResponse($nota);
 
     }
 
     /**
-     * @Route("/api/notas/favoritas", name="notas_favoritas")
+     * @Route("/notas/favoritas", name="notas_favoritas")
      * @Method("GET")
      */
     public function getNotasFavoritas()
     {
 
-        $em = $this->getDoctrine()->getManager();
+        $svc = $this->get('notas.service');
 
-        $notasFavoritas = $em->getRepository('AppBundle:Nota')->findBy(array('favorita' => true));
-
-        return new JsonResponse($notasFavoritas);
+        return new JsonResponse($svc->getNotasFavoritas());
 
     }
 

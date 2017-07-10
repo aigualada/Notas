@@ -33,3 +33,10 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+    notas.service:
+        class: AppBundle\Services\NotasService
+        public: true
+        arguments:
+              - "@doctrine.orm.entity_manager"
+              - "@serializer"
+
