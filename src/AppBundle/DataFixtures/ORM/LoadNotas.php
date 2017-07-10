@@ -3,10 +3,10 @@
 namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Entity\Nota;
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadNotas implements FixtureInterface
+class LoadNotas extends AbstractFixture
 {
 
     const NUM_NOTAS = 20;
@@ -32,6 +32,8 @@ class LoadNotas implements FixtureInterface
             $nota->setFavorita($this->faker->boolean(30));
 
             $manager->persist($nota);
+
+            $this->setReference('nota-' . $i, $nota);
 
         }
 
