@@ -31,7 +31,7 @@ class NotasController extends Controller
 
         $nota = $svc->crearNota($textNota);
 
-        return new JsonResponse($nota);
+        return new JsonResponse(array('nota' => $svc->serializar($nota)));
 
     }
 
@@ -43,7 +43,7 @@ class NotasController extends Controller
     {
         $svc = $this->get('notas.service');
 
-        return new JsonResponse(array('notas' => $svc->getNotas()));
+        return new JsonResponse(array('notas' => $svc->serializar($svc->getNotas())));
 
     }
 
@@ -55,7 +55,9 @@ class NotasController extends Controller
      */
     public function getNota(Nota $nota)
     {
-        return new JsonResponse(array('nota' => $nota));
+        $svc = $this->get('notas.service');
+
+        return new JsonResponse(array('nota' => $svc->serializar($nota)));
     }
 
     /**
@@ -70,7 +72,7 @@ class NotasController extends Controller
 
         $nota = $svc->marcarFavorita($nota);
 
-        return new JsonResponse($nota);
+        return new JsonResponse(array('nota' => $svc->serializar($nota)));
 
     }
 
@@ -83,7 +85,7 @@ class NotasController extends Controller
 
         $svc = $this->get('notas.service');
 
-        return new JsonResponse($svc->getNotasFavoritas());
+        return new JsonResponse(array('favoritas' => $svc->serializar($svc->getNotasFavoritas())));
 
     }
 

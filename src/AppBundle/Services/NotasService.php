@@ -39,7 +39,7 @@ class NotasService
 
         $this->entityManager->flush();
 
-        return $this->serializer->serialize($nota, 'json');
+        return $nota;
     }
 
     /**
@@ -49,7 +49,7 @@ class NotasService
     {
         $notas = $this->entityManager->getRepository('AppBundle:Nota')->findAll();
 
-        return $this->serializer->serialize($notas, 'json');
+        return $notas;
     }
 
     /**
@@ -62,7 +62,7 @@ class NotasService
 
         $this->entityManager->flush();
 
-        return $this->serializer->serialize($nota, 'json');
+        return $nota;
     }
 
     /**
@@ -75,8 +75,17 @@ class NotasService
             ->getRepository('AppBundle:Nota')
             ->findBy(array('favorita' => true));
 
-        return $this->serializer->serialize($notasFavoritas, 'json', array('encode' => 'UTF-8'));
+        return $notasFavoritas;
 
+    }
+
+    /**
+     * @param $notas
+     * @return string|\Symfony\Component\Serializer\Encoder\scalar
+     */
+    public function serializar($notas)
+    {
+        return $this->serializer->serialize($notas, 'json');
     }
 
 }
