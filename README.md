@@ -1,4 +1,17 @@
 Notas
 =====
 
-A Symfony project created on July 10, 2017, 8:55 am.
+Pequeña API de Notas.
+
+POST /api/nota 
+
+GET /api/nota/{id}
+
+PUT /api/nota/{id}/favorita
+
+GET /api/notas
+
+GET /api/notas/favoritas
+
+
+
